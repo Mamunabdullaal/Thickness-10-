@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paint Thickness 10%</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    .container {
+      margin: 50px auto;
+      padding: 20px;
+      max-width: 600px;
+      background: #1e1e1e;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+    }
+    h1 {
+      color: #ff6f00;
+    }
+    .form-section {
+      margin: 20px 0;
+    }
+    label {
+      font-weight: bold;
+      color: #ffc107;
+    }
+    input {
+      width: 80px;
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #555;
+      border-radius: 4px;
+      background-color: #2c2c2c;
+      color: #e0e0e0;
+    }
+    select {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #555;
+      border-radius: 4px;
+      background-color: #2c2c2c;
+      color: #e0e0e0;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      background-color: #ff6f00;
+      color: #121212;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    button:hover {
+      background-color: #ffa000;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Paint Thickness 10%</h1>
+    <div class="form-section">
+      <label for="temu-thickness">Temu Side Thickness:</label>
+      <input type="number" id="temu-thickness" placeholder="e.g., 22">
+      <label for="temu-unit">Unit:</label>
+      <select id="temu-unit">
+        <option value="cm">cm</option>
+        <option value="inches">inches</option>
+        <option value="ft">ft</option>
+        <option value="m">m</option>
+        <option value="mm">mm</option>
+      </select><br>
+      <label for="other-thickness">Right Side Thickness:</label>
+      <input type="number" id="other-thickness" placeholder="e.g., 30">
+      <label for="other-unit">Unit:</label>
+      <select id="other-unit">
+        <option value="cm">cm</option>
+        <option value="inches">inches</option>
+        <option value="ft">ft</option>
+        <option value="m">m</option>
+        <option value="mm">mm</option>
+      </select>
+    </div>
+    <button onclick="compareThickness()">Compare</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    // Conversion factors to convert units to centimeters
+    const conversionFactors = {
+      inches: 2.54, // 1 inch = 2.54 cm
+      ft: 30.48, // 1 foot = 30.48 cm
+      m: 100, // 1 meter = 100 cm
+      mm: 0.1, // 1 mm = 0.1 cm
+      cm: 1 // 1 cm = 1 cm
+    };
+
+    // Function to convert the input value to centimeters
+    function convertToCm(value, unit) {
+      return value * conversionFactors[unit] || value;
+    }
+
+    function compareThickness() {
+      // Get Temu and Right Side Thickness with Conversion to cm
+      const temuThickness = parseFloat(document.getElementById("temu-thickness").value) || 0;
+      const temuUnit = document.getElementById("temu-unit").value;
+      const otherThickness = parseFloat(document.getElementById("other-thickness").value) || 0;
+      const otherUnit = document.getElementById("other-unit").value;
+
+      // Convert all dimensions to centimeters
+      const convertedTemuThickness = convertToCm(temuThickness, temuUnit);
+      const convertedOtherThickness = convertToCm(otherThickness, otherUnit);
+
+      // Calculate Difference Ratio based on Temu's thickness
+      const differenceRatio = Math.abs(convertedTemuThickness - convertedOtherThickness) / convertedTemuThickness * 100;
+
+      // Display Result
+      const resultDiv = document.getElementById("result");
+      if (differenceRatio <= 10) {
+        resultDiv.textContent = `Same Thickness: The difference ratio is ${differenceRatio.toFixed(2)}%.`;
+        resultDiv.style.color = "#80e27e"; // Green for Same
+      } else {
+        resultDiv.textContent = `Not Same Thickness: The difference ratio is ${differenceRatio.toFixed(2)}%.`;
+        resultDiv.style.color = "#e57373"; // Red for Not Same
+      }
+    }
+  </script>
+</body>
+</html>
